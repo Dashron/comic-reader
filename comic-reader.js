@@ -20,11 +20,12 @@
 
 		_self.current_image = options.start;
 
+		// populate the initial elements array
+		_self.elements = [];
+
 		// Find all of the images, and create an array of urls
 		root_element.find('.page').each(function() {
-			$(this).find('ol.images li').each(function () {
-				_self.image_urls.push($(this).html());
-			});
+			_self.addElement($(this));
 		});
 
 		// Remove all the metadata
@@ -59,6 +60,27 @@
 	ComicReader.prototype.root_element = null;
 	ComicReader.prototype.image_urls = null;
 	ComicReader.prototype.images = null;
+	ComicReader.prototype.elements = null;
+
+	/**
+	 * Add images and metadata from an element to the comic reader
+	 * @param {Element} element
+	 */
+	ComicReader.prototype.addElement = function (element) {
+		var _self = this;
+		element.find('ol.images li').each(function () {
+			_self.image_urls.push($(this).html());
+			_self.elements.push(element);
+		});
+	};
+
+	/**
+	 * Returns the element attached to the current image
+	 * @return {Element} 
+	 */
+	ComicReader.prototype.currentElement = function () {
+		return this.elements[this.current_image];
+	}
 
 	/**
 	 * Switches to the next image
@@ -72,6 +94,7 @@
 			this.current_image += 1;
 			this.root_element.find('img').remove();
 			this.root_element.append(this.images[this.current_image]);
+			this.root_element.trigger('change');
 		}
 	};
 
@@ -87,6 +110,7 @@
 			this.current_image -= 1;
 			this.root_element.find('img').remove();
 			this.root_element.append(this.images[this.current_image]);
+			this.root_element.trigger('change');
 		}
 	};
 
@@ -130,6 +154,7 @@
 		// if no images have been shown yet, add them
 		if (this.root_element.find('img').length === 0) {
 			this.root_element.append(this.images[this.current_image]);
+			this.root_element.trigger('change');
 		}
 
 		this.root_element.show();
@@ -163,7 +188,7 @@
 		this.each(function () {
 			var reader = new ComicReader($(this), options);
 			comic_readers.push(reader);
-			$(this).comicReader = reader;
+			$(this).data('comic reader', reader);
 		});
 
 		return comic_readers;

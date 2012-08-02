@@ -12,6 +12,7 @@
 	<body>
 		<section class="comic-reader" style="display: none">
 			<span class="previous_comic">Previous</span>
+			<span class="current_page">-1</span>
 			<span class="next_comic">Next</span>
 			<br />
 		    <ol>
@@ -272,7 +273,16 @@
 
 		</section>
 		<script>
-			$('.comic-reader').comicReader({
+			var reader = $('.comic-reader');
+
+			reader.bind('change', function () {
+				var $this = $(this);
+				var reader = $this.data('comic reader');
+				$this.find('.current_page').html(reader.current_image + 1);
+				console.log(reader.currentElement().find('.comic-desc').html());
+			});
+
+			reader.comicReader({
 				preload_quantity : 5,
 				next : '.next_comic',
 				previous : '.previous_comic',
