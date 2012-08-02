@@ -279,6 +279,7 @@
 				var $this = $(this);
 				var reader = $this.data('comic reader');
 				$this.find('.current_page').html(reader.current_image + 1);
+				window.location.hash = '#' + (reader.current_image + 1);
 				console.log(reader.currentElement().find('.comic-desc').html());
 			});
 
@@ -286,7 +287,7 @@
 				preload_quantity : 5,
 				next : '.next_comic',
 				previous : '.previous_comic',
-				start : 0
+				start : window.location.hash ? (window.location.hash.substr(1) - 1) : 0
 			})[0].show();
 		</script>
 	</body>
