@@ -153,6 +153,14 @@
 	ComicReader.prototype.show = function (current_image) {
 		if (typeof current_image != "undefined" && current_image != null) {
 			this.current_image = current_image;
+
+			// load the current image first
+			this.loadImages(_self.current_image, 1);
+			// load the next {preload_images} images next
+			this.loadImages(_self.current_image + 1, options.preload_quantity);
+			// load the previous {preload_images} images next
+			this.loadImages(_self.current_image - options.preload_quantity + 1, options.preload_quantity);
+
 			this._showCurrentImage();
 		}
 
