@@ -95,6 +95,8 @@
 			this.root_element.find('img').remove();
 			this.root_element.append(this.images[this.current_image]);
 			this.root_element.trigger('change');
+		} else {
+			this.root_element.trigger('limit_reached');
 		}
 	};
 
@@ -111,6 +113,8 @@
 			this.root_element.find('img').remove();
 			this.root_element.append(this.images[this.current_image]);
 			this.root_element.trigger('change');
+		} else {
+			this.root_element.trigger('limit_reached');
 		}
 	};
 
