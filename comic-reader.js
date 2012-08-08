@@ -78,9 +78,7 @@
 			this.loadImages(this.current_image + this.options.preload_quantity);
 
 			this.current_image += 1;
-			this.root_element.find('img').remove();
-			this.root_element.append(this.images[this.current_image]);
-			this.root_element.trigger('change');
+			this._showCurrentImage();
 		}
 	};
 
@@ -94,9 +92,7 @@
 			this.loadImages(this.current_image - this.options.preload_quantity);
 
 			this.current_image -= 1;
-			this.root_element.find('img').remove();
-			this.root_element.append(this.images[this.current_image]);
-			this.root_element.trigger('change');
+			this._showCurrentImage();
 		}
 	};
 
@@ -157,16 +153,27 @@
 	ComicReader.prototype.show = function (current_image) {
 		if (typeof current_image != "undefined" && current_image != null) {
 			this.current_image = current_image;
+			this._showCurrentImage();
 		}
 
 		// if no images have been shown yet, add them
 		if (this.root_element.find('img').length === 0) {
-			this.root_element.append(this.images[this.current_image]);
-			this.root_element.trigger('change');
+			this._showCurrentImage();
 		}
 
 		this.root_element.show();
 	};
+
+	/**
+	 * Displays an the current image in the reader
+	 * @return 
+	 */
+	ComicReader.prototype._showCurrentImage = function () {
+		this.root_element.find('img').remove();
+		this.root_element.append(this.images[this.current_image]);
+		this.root_element.trigger('change');
+	};
+
 
 	/**
 	 * Hides the Comic Reader
