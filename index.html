@@ -283,20 +283,16 @@
 				console.log(reader.currentElement().find('.comic-desc').html());
 			});
 
-			reader.bind('limit_reached', function () {
-				var $this = $(this);
-				var reader = $this.data('comic reader');
-				if (reader.current_image === 0) {
-					console.log('can not go below 0');
-				} else {
-					console.log('can not go above ' + reader.current_image);
-				}
+			$('.next_comic').click(function () {
+				reader.data('comic reader').next();
+			});
+
+			$('.previous_comic').click(function () {
+				reader.data('comic reader').previous();
 			});
 
 			reader.comicReader({
 				preload_quantity : 5,
-				next : '.next_comic',
-				previous : '.previous_comic',
 				start : window.location.hash ? (window.location.hash.substr(1) - 1) : 0
 			})[0].show();
 		</script>

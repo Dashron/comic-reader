@@ -39,21 +39,7 @@
 		// load the next {preload_images} images next
 		this.loadImages(_self.current_image + 1, options.preload_quantity);
 		// load the previous {preload_images} images next
-		this.loadImages(_self.current_image - options.preload_quantity - 1, options.preload_quantity);
-
-		// assign the click event for next. todo: move this out of here and into events
-		if (typeof options.next === "string") {
-			root_element.find(options.next).click(function (event) {
-				_self.next();
-			});
-		}
-
-		// assign the click event for previous. todo: move this out of here and into events
-		if (typeof options.previous === "string") {
-			root_element.find(options.previous).click(function (event) {
-				_self.previous();
-			});
-		}
+		this.loadImages(_self.current_image - options.preload_quantity + 1, options.preload_quantity);
 	};
 
 	ComicReader.prototype.current_image = 0;
@@ -87,7 +73,7 @@
 	 */
 	ComicReader.prototype.next = function () {
 		// show/hiding elements is probably faster than adding/removing from dom
-		if (this.current_image < this.images.length - 1) {
+		if (this.hasNext()) {
 			// load one image, to ensure that there are at least preload_quantity of images loaded in each direction
 			this.loadImages(this.current_image + this.options.preload_quantity);
 
@@ -95,8 +81,6 @@
 			this.root_element.find('img').remove();
 			this.root_element.append(this.images[this.current_image]);
 			this.root_element.trigger('change');
-		} else {
-			this.root_element.trigger('limit_reached');
 		}
 	};
 
@@ -105,7 +89,7 @@
 	 */
 	ComicReader.prototype.previous = function () {
 		// show/hiding elements is probably faster than adding/removing from dom
-		if (this.current_image > 0) {
+		if (this.hasPrevious()) {
 			// load one image, to ensure that there are at least preload_quantity of images loaded in each direction
 			this.loadImages(this.current_image - this.options.preload_quantity);
 
@@ -113,10 +97,25 @@
 			this.root_element.find('img').remove();
 			this.root_element.append(this.images[this.current_image]);
 			this.root_element.trigger('change');
-		} else {
-			this.root_element.trigger('limit_reached');
 		}
 	};
+
+	/**
+	 * If there are images beyond the current one
+	 * @return {Boolean} [description]
+	 */
+	ComicReader.prototype.hasNext = function () {
+		return this.current_image < this.images.length - 1;
+	};
+
+	/**
+	 * If there are images before the current one
+	 * @return {Boolean}
+	 */
+	ComicReader.prototype.hasPrevious = function () {
+		return this.current_image > 0;
+	};
+
 
 	/**
 	 * Preloads a chunk of images, from start to start + count
@@ -153,8 +152,13 @@
 
 	/**
 	 * Shows the Comic Reader
+	 * @param  {Number} current_image Optional, sets the current image
 	 */
-	ComicReader.prototype.show = function () {
+	ComicReader.prototype.show = function (current_image) {
+		if (typeof current_image != "undefined" && current_image != null) {
+			this.current_image = current_image;
+		}
+
 		// if no images have been shown yet, add them
 		if (this.root_element.find('img').length === 0) {
 			this.root_element.append(this.images[this.current_image]);
