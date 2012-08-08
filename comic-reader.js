@@ -155,11 +155,11 @@
 			this.current_image = current_image;
 
 			// load the current image first
-			this.loadImages(_self.current_image, 1);
+			this.loadImages(this.current_image, 1);
 			// load the next {preload_images} images next
-			this.loadImages(_self.current_image + 1, options.preload_quantity);
+			this.loadImages(this.current_image + 1, options.preload_quantity);
 			// load the previous {preload_images} images next
-			this.loadImages(_self.current_image - options.preload_quantity + 1, options.preload_quantity);
+			this.loadImages(this.current_image - options.preload_quantity + 1, options.preload_quantity);
 
 			this._showCurrentImage();
 		}
